@@ -1,13 +1,12 @@
 #!/usr/bin/env bash
-set -ev
+set -e
 
 echo "Publish to NPM"
 npm publish
 
 echo "Add release in git"
-git remote rm origin
-git remote add origin $GITHUB_URL_SECURED
-hub push --follow-tags --set-upstream origin $TRAVIS_PULL_REQUEST_BRANCH
+standard-version --skip.bump --skip.changelog --skip.commit
+hub push --follow-tags
 
 if [[ -v $SLACK_NOTIFICATION_PATH && -v $SLACK_WEBHOOK ]]
     echo "Slack notification setting present. Proceed to generate Changelog notification"
