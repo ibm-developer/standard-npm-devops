@@ -1,14 +1,16 @@
 #!/usr/bin/env bash
 set -e
 
+echo "Add release in git"
+git fetch origin $TRAVIS_BRANCH
+git checkout $TRAVIS_BRANCH
+standard-version --skip.bump --skip.changelog --skip.commit
+git push ${REMOTE:-origin} --tags
+
 echo "Publish to NPM"
 npm publish
 
-echo "Add release in git"
-standard-version --skip.bump --skip.changelog --skip.commit
-hub push --follow-tags
-
-if [[ -v $SLACK_NOTIFICATION_PATH && -v $SLACK_WEBHOOK ]]
+if [[ -v $SLACK_NOTIFICATION_PATH && -v $SLACK_WEBHOOK ]]; then
     echo "Slack notification setting present. Proceed to generate Changelog notification"
     HTML=$(markdown CHANGELOG.md)
     PKG_NAME=`node -e "console.log(require('./package.json').name);"`
