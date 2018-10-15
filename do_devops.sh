@@ -36,11 +36,12 @@ git config --global --add hub.host $(echo ${GIT_URL} | grep -Po "(?<=@).+\..+(?=
 
 # Settings to fetch origin
 git config remote.origin.fetch +refs/heads/*:refs/remotes/origin/*
+git config --add remote.origin.fetch +refs/tags/*:refs/tags/*
 
 if [[ "${TRAVIS_PULL_REQUEST}" != "false" ]]; then
     echo "Current build is a Pull Request build."
     echo "Checking if the commits meets the Conventional Commits Specification."
-    git fetch origin $TRAVIS_BRANCH
+    git fetch
     $DEVOPS_SCRIPT_DIR/conventional_commits_linter.sh
 
     if [[ $TRAVIS_BRANCH == $PROD_BRANCH ]]; then

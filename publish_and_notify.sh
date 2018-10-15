@@ -2,7 +2,6 @@
 set -e
 
 echo "Add release in git"
-git fetch origin $TRAVIS_BRANCH
 git checkout $TRAVIS_BRANCH
 standard-version --skip.bump --skip.changelog --skip.commit
 git push ${REMOTE:-origin} --tags
