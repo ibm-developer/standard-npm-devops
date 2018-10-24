@@ -64,7 +64,7 @@ else
     fi
 fi
 
-if [[ -v $REMOTE ]]; then
+if [[ ! -z $REMOTE ]]; then
     git remote remove $REMOTE
 fi
 

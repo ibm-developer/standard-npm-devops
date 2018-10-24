@@ -9,7 +9,7 @@ git push ${REMOTE:-origin} --tags
 echo "Publish to NPM"
 npm publish
 
-if [[ -v $SLACK_NOTIFICATION_PATH && -v $SLACK_WEBHOOK ]]; then
+if [[ ! -z $SLACK_NOTIFICATION_PATH && ! -z $SLACK_WEBHOOK ]]; then
     echo "Slack notification setting present. Proceed to generate Changelog notification"
     HTML=$(markdown CHANGELOG.md)
     PKG_NAME=`node -e "console.log(require('./package.json').name);"`

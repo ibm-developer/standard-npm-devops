@@ -13,6 +13,12 @@ if [[ $(git log HEAD~1..HEAD --format=%s | grep "chore(release): ") == "" ]]; th
         exit 1
     fi
 
+    if [[ ! -z $BEFORE_VERSION_BUMP ]]; then
+        echo "Running '${BEFORE_VERSION_BUMP}' before bumping version"
+        $BEFORE_VERSION_BUMP
+        git add .
+    fi
+
     standard-version --skip.tag
     git push ${REMOTE:-origin} $TRAVIS_PULL_REQUEST_BRANCH
 else
