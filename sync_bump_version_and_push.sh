@@ -2,6 +2,7 @@
 set -e
 
 if [[ $(git log HEAD~1..HEAD --format=%s | grep "chore(release): ") == "" ]]; then
+    git checkout -- .
     git checkout $TRAVIS_PULL_REQUEST_BRANCH
 
     echo "Attempting to sync ${TRAVIS_PULL_REQUEST_BRANCH} branch with latest of ${TRAVIS_BRANCH} branch."
