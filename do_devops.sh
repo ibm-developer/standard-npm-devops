@@ -29,6 +29,9 @@ GIT_URL=$(git config remote.origin.url)
 if [[ ${GIT_URL:0:8} == "https://" ]]; then
     export REMOTE=bot
     git remote add $REMOTE "${GIT_URL:0:8}${GITHUB_TOKEN}@${GIT_URL:8}"
+else
+    git config --global user.email "mobileb@us.ibm.com"
+    git config --global user.name "MobileBuild"
 fi
 
 # Setting up hub
