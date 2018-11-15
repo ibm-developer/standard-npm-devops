@@ -25,7 +25,7 @@ if [[ -z $GITHUB_TOKEN ]]; then
     exit 1
 fi
 
-GIT_URL=$(git remote get-url origin)
+GIT_URL=$(git config remote.origin.url)
 if [[ ${GIT_URL:0:8} == "https://" ]]; then
     export REMOTE=bot
     git remote add $REMOTE "${GIT_URL:0:8}${GITHUB_TOKEN}@${GIT_URL:8}"
