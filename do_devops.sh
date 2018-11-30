@@ -1,7 +1,10 @@
 #!/usr/bin/env bash
 set -e
 
-if [[ -z $NPM_TOKEN ]]; then
+# Only Require npm token for master branch build 
+if [[ -z $NPM_TOKEN &&  \
+      "${TRAVIS_PULL_REQUEST}" == "false" && \
+      $TRAVIS_BRANCH == $PROD_BRANCH ]]; then
     echo NPM_TOKEN is required.
 fi
 
@@ -20,7 +23,10 @@ if [[ -z $PROD_BRANCH ]]; then
     exit 1
 fi
 
-if [[ -z $GITHUB_TOKEN ]]; then
+# Require github token for all but fork PR build 
+if [ -z $GITHUB_TOKEN && \ 
+     [ "${TRAVIS_PULL_REQUEST}" == "false" || \
+       "${TRAVIS_PULL_REQUEST_SLUG}" == "${TRAVIS_REPO_SLUG}" ]]; then
     echo GITHUB_TOKEN is required.
     exit 1
 fi
@@ -51,12 +57,16 @@ if [[ "${TRAVIS_PULL_REQUEST}" != "false" ]]; then
         echo "The Pull Request is against ${PROD_BRANCH} branch. Proceed to update NPM package version."
         $DEVOPS_SCRIPT_DIR/sync_bump_version_and_push.sh
     else
-        echo "Making sure ${TRAVIS_PULL_REQUEST_BRANCH} branch is in sync with ${TRAVIS_BRANCH} branch."
-        git fetch origin $TRAVIS_PULL_REQUEST_BRANCH
-        $DEVOPS_SCRIPT_DIR/check_branch_sync.sh
+        # Only do pr check for ibm-developer PR builds, i.e. not for forks
+        if [[ "${TRAVIS_PULL_REQUEST_SLUG}" == "${TRAVIS_REPO_SLUG}" ]]; then
+            echo "Making sure ${TRAVIS_PULL_REQUEST_BRANCH} branch is in sync with ${TRAVIS_BRANCH} branch."
 
-        echo "Checking if there is an outstanding PR to ${PROD_BRANCH} branch from ${TRAVIS_BRANCH} branch."
-        $DEVOPS_SCRIPT_DIR/check_pr.sh
+            git fetch origin $TRAVIS_PULL_REQUEST_BRANCH
+            $DEVOPS_SCRIPT_DIR/check_branch_sync.sh
+
+            echo "Checking if there is an outstanding PR to ${PROD_BRANCH} branch from ${TRAVIS_BRANCH} branch."
+            $DEVOPS_SCRIPT_DIR/check_pr.sh
+        fi
     fi
 else
     if [[ $TRAVIS_BRANCH == $PROD_BRANCH ]]; then
