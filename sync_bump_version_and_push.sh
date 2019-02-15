@@ -6,7 +6,7 @@ if [[ $(git log HEAD~1..HEAD --format=%s | grep "chore(release): ") == "" ]]; th
     git checkout $TRAVIS_PULL_REQUEST_BRANCH
 
     echo "Attempting to sync ${TRAVIS_PULL_REQUEST_BRANCH} branch with latest of ${TRAVIS_BRANCH} branch."
-    git merge origin/$TRAVIS_BRANCH
+    git merge --no-edit origin/$TRAVIS_BRANCH
 
     if [[ $(git ls-files -u | wc -l) -gt 0 ]]; then
         echo "Cannot automatically merge ${TRAVIS_PULL_REQUEST_BRANCH} branch with latest of ${TRAVIS_BRANCH} branch"
