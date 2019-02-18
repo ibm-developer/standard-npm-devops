@@ -4,7 +4,7 @@ const path = require('path');
 const generator_dir = path.resolve('../linked_generators');
 const fs = require('fs-extra');
 const Promise = require('bluebird');
-const linked_dependencies = require('../linked_dependencies');
+const linked_dependencies = require(path.resolve(process.env.UPDATE_DEPENDENCIES));
 
 fs.ensureDirSync(generator_dir);
 
