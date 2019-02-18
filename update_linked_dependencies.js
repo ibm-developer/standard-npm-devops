@@ -1,9 +1,9 @@
 const fs = require('fs-extra');
 const path = require('path');
 const Promise = require('bluebird');
-const linked_dependencies = require('../linked_dependencies');
+const linked_dependencies = require(path.resolve(process.env.UPDATE_DEPENDENCIES));
 const generator_dir = path.resolve('../linked_generators');
-let package_json = require('./package');
+let package_json = require(path.resolve('./package'));
 
 Promise.map(linked_dependencies, generator => {
   console.log("update linked dependencies");
