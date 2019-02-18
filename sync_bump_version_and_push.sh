@@ -13,6 +13,12 @@ if [[ $(git log HEAD~1..HEAD --format=%s | grep "chore(release): ") == "" ]]; th
         exit 1
     fi
 
+    if [[ ! -z $UPDATE_DEPENDENCIES ]]; then
+        echo "Running '${UPDATE_DEPENDENCIES}' before bumping version"
+        node $DEVOPS_SCRIPT_DIR/update_linked_dependencies.js
+        git add .
+    fi
+    
     if [[ ! -z $BEFORE_VERSION_BUMP ]]; then
         echo "Running '${BEFORE_VERSION_BUMP}' before bumping version"
         $BEFORE_VERSION_BUMP

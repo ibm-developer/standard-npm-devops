@@ -24,7 +24,7 @@ if [[ -z $PROD_BRANCH ]]; then
 fi
 
 # Require github token for all but fork PR build 
-if [ -z $GITHUB_TOKEN && \ 
+if [ -z $GITHUB_TOKEN && \
      [ "${TRAVIS_PULL_REQUEST}" == "false" || \
        "${TRAVIS_PULL_REQUEST_SLUG}" == "${TRAVIS_REPO_SLUG}" ]]; then
     echo GITHUB_TOKEN is required.
