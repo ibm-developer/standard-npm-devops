@@ -16,6 +16,7 @@ if [[ $(git log HEAD~1..HEAD --format=%s | grep "chore(release): ") == "" ]]; th
     if [[ ! -z $UPDATE_DEPENDENCIES ]]; then
         echo "Running '${UPDATE_DEPENDENCIES}' before bumping version"
         node $DEVOPS_SCRIPT_DIR/update_linked_dependencies.js
+        npm install --package-lock-only
         git add .
     fi
     
