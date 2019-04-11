@@ -9,7 +9,7 @@ const linked_dependencies = require(path.resolve(process.env.UPDATE_DEPENDENCIES
 fs.ensureDirSync(generator_dir);
 
 Promise.map(linked_dependencies, generator => {
-  let branch = process.env.TRAVIS_BRANCH || 'develop';
+  let branch = (process.env.TRAVIS_BRANCH == 'master') ? 'master' : 'develop';
   return exec(`git clone -b ${branch} ${generator.repo}`, {cwd: generator_dir})
   .then(() => {
     // Check if the package.json exists
