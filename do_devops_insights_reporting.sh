@@ -40,4 +40,4 @@ else
 		--commitid=$TRAVIS_COMMIT --status="fail"
 fi
 
-exit $POLICY_EXIT
+exit 0 
