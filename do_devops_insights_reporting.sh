@@ -22,7 +22,7 @@ npm i -g grunt-idra3
 mkdir -p $DEVOPS_REPORT_DIR
 
 nyc report --reporter=cobertura --report-dir=$DEVOPS_REPORT_DIR
-mocha --reporter=json > $DEVOPS_REPORT_DIR/mocha-unittest.json
+mocha --recursive --reporter=json > $DEVOPS_REPORT_DIR/mocha-unittest.json
 
 idra --publishtestresult --filelocation=$DEVOPS_REPORT_DIR/cobertura-coverage.xml \
 	--env=$TRAVIS_BRANCH --type=code --drilldownurl=$TRAVIS_JOB_WEB_URL
