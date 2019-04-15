@@ -22,22 +22,25 @@ npm i -g grunt-idra3
 mkdir -p $DEVOPS_REPORT_DIR
 
 nyc report --reporter=cobertura --report-dir=$DEVOPS_REPORT_DIR
-mocha --recursive --reporter=json > $DEVOPS_REPORT_DIR/mocha-unittest.json
+if [ ! -f $TRAVIS_BUILD_DIR/xunit.xml ]; then
+	mocha --recursive --reporter mocha-multi-reporters --reporter-options configFile=config.json;
+fi
 
 idra --publishtestresult --filelocation=$DEVOPS_REPORT_DIR/cobertura-coverage.xml \
 	--env=$TRAVIS_BRANCH --type=code --drilldownurl=$TRAVIS_JOB_WEB_URL
-idra --publishtestresult --filelocation=$DEVOPS_REPORT_DIR/mocha-unittest.json \
+idra --publishtestresult --filelocation=$TRAVIS_BUILD_DIR/xunit.xml \
 	--env=$TRAVIS_BRANCH --type=unittest --drilldownurl=$TRAVIS_JOB_WEB_URL
 idra --evaluategate  --policy=devex-languages-base --forcedecision=true
 
 POLICY_EXIT=$?
+STATUS="pass"
+if [ ! "$POLICY_EXIT" -eq 0 ]; then
+	STATUS=fail
+fi
 
-if [ "$POLICY_EXIT" -eq 0 ]; then
+if [ -z $TRAVIS_PULL_REQUEST_BRANCH ]; then
 	idra --publishbuildrecord  --branch=$TRAVIS_BRANCH --repositoryurl=$GIT_URL \
-		--commitid=$TRAVIS_COMMIT --status="pass"
-else
-	idra --publishbuildrecord  --branch=$TRAVIS_BRANCH --repositoryurl=$GIT_URL \
-		--commitid=$TRAVIS_COMMIT --status="fail"
+		--commitid=$TRAVIS_COMMIT --status="$STATUS"
 fi
 
 exit 0 
