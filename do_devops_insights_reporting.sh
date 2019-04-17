@@ -3,7 +3,7 @@
 #  are defined in .travis.yml global variables and normal travis env variables as well
 
 export BUILD_NUMBER=`date '+%Y-%m-%d %H:%M:%S'`
-export IDRA_DEBUG=true
+export IDRA_DEBUG=false
 
 if [ -z "$TRAVIS_BUILD_DIR" ]; then 
 	echo "ERROR: devops insights must be run from travis build"
@@ -33,6 +33,7 @@ idra --publishtestresult --filelocation=$TRAVIS_BUILD_DIR/xunit.xml \
 idra --evaluategate  --policy=devex-languages-base --forcedecision=true
 
 POLICY_EXIT=$?
+
 STATUS="pass"
 if [ ! "$POLICY_EXIT" -eq 0 ]; then
 	STATUS=fail
@@ -43,4 +44,5 @@ if [ -z $TRAVIS_PULL_REQUEST_BRANCH ]; then
 		--commitid=$TRAVIS_COMMIT --status="$STATUS"
 fi
 
-exit 0 
+exit $POLICY_EXIT
+
