@@ -4,7 +4,7 @@ set -e
 if [[ $TRAVIS_BRANCH == $DEV_BRANCH ]]; then
     echo "Pull Request Build is targetting ${DEV_BRANCH}. Check if all commits have prefixes."
     TOTAL_COMMITS=$(git log origin/$TRAVIS_BRANCH..HEAD --oneline | wc -l)
-    VALID_COMMITS=$(git log origin/$TRAVIS_BRANCH..HEAD --format='%s' | grep -E "^(Merge|(fix|feat|BREAKING CHANGE|chore|docs|style|refactor|perf|test|improvement)(.+)?:) " | wc -l)
+    VALID_COMMITS=$(git log origin/$TRAVIS_BRANCH..HEAD --format='%s' | grep -E "^(Merge|(fix|feat|BREAKING CHANGE|chore|docs|style|refactor|perf|test|improvement|build)(.+)?:) " | wc -l)
     echo "${VALID_COMMITS} out of ${TOTAL_COMMITS} commits follows Conventional Commit Specification or is a merge commit."
 
     if [[ $TOTAL_COMMITS == 0 ]]; then
