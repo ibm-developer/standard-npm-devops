@@ -18,7 +18,7 @@ if [[ $TRAVIS_BRANCH == $DEV_BRANCH ]]; then
     fi
 else
     echo "Pull Request Build is targeting ${PROD_BRANCH}. Check if at least one commit has a prefix."
-    PREFIXED_COMMITS=$(git log origin/$TRAVIS_BRANCH..HEAD --format='%s' | grep -E "^(fix|feat|BREAKING CHANGE|chore|docs|style|refactor|perf|test|improvement)(.+)?: " | wc -l)
+    PREFIXED_COMMITS=$(git log origin/$TRAVIS_BRANCH..HEAD --format='%s' | grep -E "^(fix|feat|BREAKING CHANGE|chore|docs|style|refactor|perf|test|improvement|build)(.+)?: " | wc -l)
     if [[ $PREFIXED_COMMITS -lt 1 ]]; then
         echo "No commit follows the Conventional Commit Specification. Please make corrections and try again."
         exit 1
